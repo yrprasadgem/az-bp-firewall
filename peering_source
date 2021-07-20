@@ -1,0 +1,45 @@
+########################################
+# Azure Vnet
+########################################
+module "vnet_peering" {
+  source = "git::git@bitbucket.org:contournetworkdelivery/azure-vnet-peering-module.git?ref=master"
+
+  peerings = [
+    {
+      source = {
+        vnet_name                    = "${module.azure_vnet_creation.virtual_network_name}",
+        resource_group_name          = var.resource_group_name,
+        allow_virtual_network_access = true,
+        allow_forwarded_traffic      = true,
+        allow_gateway_transit        = false,
+        use_remote_gateways          = false,
+      },
+      destination = {
+        vnet_name                    = "vnetkt-nprd-aksapp01",
+        resource_group_name          = "rgkt-nprd-aksapp01",
+        allow_virtual_network_access = true,
+        allow_forwarded_traffic      = true,
+        allow_gateway_transit        = false,
+        use_remote_gateways          = false,
+      }
+    },
+    {
+      source = {
+        vnet_name                    = "${module.azure_vnet_creation.virtual_network_name}",
+        resource_group_name          = var.resource_group_name,
+        allow_virtual_network_access = true,
+        allow_forwarded_traffic      = true,
+        allow_gateway_transit        = false,
+        use_remote_gateways          = false,
+      },
+      destination = {
+        vnet_name                    = "vnet-vgw-azvpn-cntr",
+        resource_group_name          = "rg-vgw-azvpn-cntr",
+        allow_virtual_network_access = true,
+        allow_forwarded_traffic      = true,
+        allow_gateway_transit        = false,
+        use_remote_gateways          = false,
+      }
+    }
+  ]
+}
